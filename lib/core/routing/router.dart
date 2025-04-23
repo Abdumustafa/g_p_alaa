@@ -1,0 +1,17 @@
+
+import 'package:g_p_alaa/feature/comunity_screen/ui/screen/community_screen.dart';
+import 'package:g_p_alaa/feature/comunity_screen/ui/screen/create_post_screen.dart';
+import 'package:get/get.dart';
+
+
+class AppRouter {
+  static String initialRoute = '/';
+
+  static List<GetPage> routes = [
+        GetPage(name: '/', page: () => CommunityScreen()),
+
+    GetPage(name: '/CreatePostScreen', page: () => CreatePostScreen()),
+    // GetPage(name: '/login', page: () => LoginScreen()),
+  ];
+}
+
