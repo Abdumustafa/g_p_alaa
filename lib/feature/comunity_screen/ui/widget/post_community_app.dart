@@ -4,6 +4,8 @@ import 'package:g_p_alaa/core/helper/spaces.dart';
 import 'package:g_p_alaa/core/theming/styles.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/modal_bottom_sheet.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/profile_image.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class PostCommunityApp extends StatelessWidget {
   const PostCommunityApp({
@@ -11,16 +13,16 @@ class PostCommunityApp extends StatelessWidget {
     required this.profileImage,
     required this.profileName,
     required this.postDate,
-    required this.yourMain,
-    required this.yourMainColor,
+    required this.tag,
+    required this.tagColor,
     required this.postText,
     this.postImage,
   });
   final String profileImage;
   final String profileName;
   final String postDate;
-  final String yourMain;
-  final Color yourMainColor;
+  final String tag;
+  final Color tagColor;
   final String postText;
   final String? postImage;
 
@@ -46,7 +48,7 @@ class PostCommunityApp extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  ProfileImage(
+                  ProfileImageDesign(
                     image: profileImage,
                   ),
                   Padding(
@@ -79,18 +81,27 @@ class PostCommunityApp extends StatelessWidget {
                     height: 30,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: yourMainColor),
+                        color: tagColor),
                     child: Padding(
                         padding: EdgeInsets.only(right: 10, left: 10),
                         child: Text(
-                          yourMain,
+                          tag,
                           style: TextStyles.font20greyregularMerriweather,
                         )),
                   ),
-                  horizontalSpace(8),
-                  Icon(
-                    Icons.more_vert_rounded,
-                    color: Colors.blueGrey,
+                  horizontalSpace(5),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.toNamed("/EditProfile");
+                      },
+                      child: Icon(
+                        Icons.edit,
+                        size: 20,
+                        color: Colors.blueGrey,
+                      ),
+                    ),
                   ),
                 ],
               ),

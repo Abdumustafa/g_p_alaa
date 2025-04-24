@@ -89,7 +89,7 @@ class OpacityWelcomScreen extends StatelessWidget {
                     letterSpacing: 1.2,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

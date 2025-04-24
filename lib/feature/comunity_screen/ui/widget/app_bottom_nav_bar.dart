@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:g_p_alaa/core/services/get_all_posts.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 
 class AppBottomNavigationBar extends StatelessWidget {
   const AppBottomNavigationBar({
@@ -21,8 +21,8 @@ class AppBottomNavigationBar extends StatelessWidget {
         children: [
           InkWell(
             onTap: () async {
-              const String token =
-                  'TOKEN__eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFtaXJhQGdtYWlsLmNvbSIsImlhdCI6MTc0MTk1MzE4Nn0.IWiPhNrbOsKw8wWjcdojOJj9M7ot_pOwSvAuoyN7anY';
+              // const String token =
+              //     'TOKEN__eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFtaXJhQGdtYWlsLmNvbSIsImlhdCI6MTc0MTk1MzE4Nn0.IWiPhNrbOsKw8wWjcdojOJj9M7ot_pOwSvAuoyN7anY';
               // http.Response response = await http.get(
               //     Uri.parse(
               //         "https://renalyze-amiras-projects-2023fd67.vercel.app/post/all"),

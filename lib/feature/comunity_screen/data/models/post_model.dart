@@ -32,21 +32,29 @@ class PostModel {
     required this.isLiked,
   });
 
-  factory PostModel.fromJson(jsonData) {
+  factory PostModel.fromJson(Map<String, dynamic>? jsonData) {
+    if (jsonData == null) {
+      throw ArgumentError("jsonData is null");
+    }
+
     return PostModel(
-      id: jsonData("_id"),
+      id: jsonData["_id"],
       user: User.fromJson(jsonData['userId']),
       content: jsonData['content'],
-      media:
-          (jsonData['media'] as List).map((e) => MediaModel.fromJson(e)).toList(),
+      media: (jsonData['media'] as List)
+          .map((e) => MediaModel.fromJson(e))
+          .toList(),
       tag: jsonData['tag'],
       createdAt: DateTime.parse(jsonData['createdAt']),
       updatedAt: DateTime.parse(jsonData['updatedAt']),
       commentCount: jsonData['commentCount'],
-      likes: (jsonData['likes'] as List).map((e) => LikeModel.fromJson(e)).toList(),
+      likes: (jsonData['likes'] as List)
+          .map((e) => LikeModel.fromJson(e))
+          .toList(),
       likesCount: jsonData['likesCount'],
-      comments:
-          (jsonData['comments'] as List).map((e) => CommentModel.fromJson(e)).toList(),
+      comments: (jsonData['comments'] as List)
+          .map((e) => CommentModel.fromJson(e))
+          .toList(),
       isLiked: jsonData['isLiked'],
     );
   }

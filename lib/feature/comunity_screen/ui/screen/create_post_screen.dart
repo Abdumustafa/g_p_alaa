@@ -3,16 +3,32 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:g_p_alaa/core/helper/spaces.dart';
 import 'package:g_p_alaa/core/theming/font_weight_helper.dart';
 import 'package:g_p_alaa/core/theming/styles.dart';
+import 'package:g_p_alaa/feature/comunity_screen/ui/widget/camera_Button_sheet.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/profile_image.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/tgs_box_text.dart';
 import 'package:get/get.dart';
 
-class CreatePostScreen extends StatelessWidget {
+class CreatePostScreen extends StatefulWidget {
   CreatePostScreen({super.key});
 
+  @override
+  State<CreatePostScreen> createState() => _CreatePostScreenState();
+}
+
+class _CreatePostScreenState extends State<CreatePostScreen> {
+  String? selectedItemTwo = '  public';
+
+  List<String> itemsTwo = [
+    '  public',
+    '  private',
+  ];
+
   final RxString selectedOption = "None".obs;
+
   final RxBool isTagsVisible = false.obs;
+
   final RxBool isPostEnabled = false.obs;
+
   final TextEditingController postController = TextEditingController();
 
   Color getTagColor(String tag) {
@@ -91,7 +107,36 @@ class CreatePostScreen extends StatelessWidget {
               verticalSpace(20),
               Row(
                 children: [
-                  ProfileImage(image: "assets/images/person8.png"),
+                  ProfileImageDesign(image: "assets/images/person8.png"),
+                  horizontalSpace(5),
+                  Container(
+                    height: 30,
+                    margin: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: DropdownButton<String>(
+                      value: selectedItemTwo,
+                      icon: Icon(Icons.arrow_drop_down),
+                      elevation: 16,
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedItemTwo = newValue!;
+                        });
+                      },
+                      items: itemsTwo
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  Spacer(),
+                  CameraModelBottonSheet(),
                 ],
               ),
               Row(

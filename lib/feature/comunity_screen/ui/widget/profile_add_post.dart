@@ -19,7 +19,7 @@ class ProfileAndAddPost extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20),
-            child: ProfileImage(
+            child: ProfileImageDesign(
               image: 'assets/images/person1.png',
             ),
           ),

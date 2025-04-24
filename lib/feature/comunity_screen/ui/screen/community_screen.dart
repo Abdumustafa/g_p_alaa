@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:g_p_alaa/core/helper/spaces.dart';
-import 'package:g_p_alaa/core/services/get_all_posts.dart';
 import 'package:g_p_alaa/core/theming/styles.dart';
 import 'package:g_p_alaa/feature/comunity_screen/data/models/post_model.dart';
 import 'package:g_p_alaa/feature/comunity_screen/data/models/user_model.dart';
@@ -114,33 +113,23 @@ class _CommunityScreenState extends State<CommunityScreen> {
               children: [
                 ProfileAndAddPost(),
                 verticalSpace(30),
-                FutureBuilder<List<PostModel>>(
-                    future: AllPostsServices().getAllPosts(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: posts.length,
-                          itemBuilder: (context, index) {
-                            final post = posts[index];
-                            return PostCommunityApp(
-                              profileImage: post.user.profileImage.url,
-                              profileName: post.user.userName,
-                              postDate:
-                                  '${post.createdAt.day}/${post.createdAt.month}',
-                              yourMain: post.tag,
-                              yourMainColor: Colors.red,
-                              postText: post.content,
-                              postImage: post.media.isNotEmpty
-                                  ? post.media[0].url
-                                  : null,
-                            );
-                          },
-                        );
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      final post = posts[index];
+                      return PostCommunityApp(
+                        profileImage: post.user.profileImage.url,
+                        profileName: post.user.userName,
+                        postDate:
+                            '${post.createdAt.day}/${post.createdAt.month}',
+                        tag: post.tag,
+                        tagColor: Colors.red,
+                        postText: post.content,
+                        postImage:
+                            post.media.isNotEmpty ? post.media[0].url : null,
+                      );
                     }),
                 verticalSpace(30),
               ],
