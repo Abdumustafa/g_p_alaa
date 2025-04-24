@@ -5,15 +5,13 @@ import 'package:http/http.dart' as http;
 class ApiMethod {
   //Get request
 
-  Future<dynamic> get({required String url, String? token}) async {
-    Map<String, String> headers = {};
+  Future<dynamic> get({required String url,}) async {
 
-    if (token != null) {
-      headers.addAll({
-        "Authorization": "Bearer $token",
-      });
-    }
-    http.Response response = await http.get(Uri.parse(url));
+    
+    http.Response response = await http.get(Uri.parse(url), headers: {
+      'token':
+          "TOKEN__eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFtaXJhQGdtYWlsLmNvbSIsImlhdCI6MTc0MTk1MzE4Nn0.IWiPhNrbOsKw8wWjcdojOJj9M7ot_pOwSvAuoyN7anY",
+    });
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -23,7 +21,7 @@ class ApiMethod {
     }
   }
 
-  //Post request
+  // Post request
   Future<dynamic> post(
       {required String url, dynamic body, String? token}) async {
     Map<String, String> headers = {};

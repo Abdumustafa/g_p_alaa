@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:g_p_alaa/core/helper/spaces.dart';
+import 'package:g_p_alaa/core/services/get_all_posts.dart';
 import 'package:g_p_alaa/core/theming/styles.dart';
+import 'package:g_p_alaa/feature/comunity_screen/data/models/post_model.dart';
+import 'package:g_p_alaa/feature/comunity_screen/data/models/user_model.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/screen/opacity_welcom_screen.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/app_bottom_nav_bar.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/notifications_icon.dart';
@@ -22,6 +25,72 @@ class _CommunityScreenState extends State<CommunityScreen> {
       showOverlay = false;
     });
   }
+
+  List<PostModel> posts = [
+    PostModel(
+      id: '2',
+      user: User(
+        id: 'u2',
+        userName: 'Sara Kamal',
+        profileImage: ProfileImage(
+          url: 'assets/images/person2.png',
+          id: 'p1',
+        ),
+      ),
+      content: 'Health is wealth 💪 Stay hydrated and exercise!',
+      media: [],
+      tag: 'Advice',
+      createdAt: DateTime.parse("2025-03-10T14:20:00.000Z"),
+      updatedAt: DateTime.parse("2025-03-10T14:20:00.000Z"),
+      commentCount: 0,
+      likes: [],
+      likesCount: 0,
+      comments: [],
+      isLiked: false,
+    ),
+    PostModel(
+      id: '2',
+      user: User(
+        id: 'u2',
+        userName: 'Sara Kamal',
+        profileImage: ProfileImage(
+          url: 'assets/images/person2.png',
+          id: 'p1',
+        ),
+      ),
+      content: 'Health is wealth 💪 Stay hydrated and exercise!',
+      media: [],
+      tag: 'Advice',
+      createdAt: DateTime.parse("2025-03-10T14:20:00.000Z"),
+      updatedAt: DateTime.parse("2025-03-10T14:20:00.000Z"),
+      commentCount: 0,
+      likes: [],
+      likesCount: 0,
+      comments: [],
+      isLiked: false,
+    ),
+    PostModel(
+      id: '2',
+      user: User(
+        id: 'u2',
+        userName: 'Sara Kamal',
+        profileImage: ProfileImage(
+          url: 'assets/images/person2.png',
+          id: 'p1',
+        ),
+      ),
+      content: 'Health is wealth 💪 Stay hydrated and exercise!',
+      media: [],
+      tag: 'Advice',
+      createdAt: DateTime.parse("2025-03-10T14:20:00.000Z"),
+      updatedAt: DateTime.parse("2025-03-10T14:20:00.000Z"),
+      commentCount: 0,
+      likes: [],
+      likesCount: 0,
+      comments: [],
+      isLiked: false,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -45,35 +114,34 @@ class _CommunityScreenState extends State<CommunityScreen> {
               children: [
                 ProfileAndAddPost(),
                 verticalSpace(30),
-                PostCommunityApp(
-                  profileImage: 'assets/images/person2.png',
-                  profileName: 'Rosy Rose',
-                  postDate: '2 Feb at 4:56',
-                  yourMain: 'Question',
-                  yourMainColor: Color(0xffd5dbf5),
-                  postText:
-                      'Overcoming kidney disease was tough, but I’m grateful for the journey. Wishing healing for all. ❤️ #SupportPost',
-                ),
-                verticalSpace(20),
-                PostCommunityApp(
-                  profileImage: 'assets/images/person3.png',
-                  profileName: 'yamen ali',
-                  postDate: '3 June at 1:00',
-                  yourMain: 'Advice',
-                  yourMainColor: Color(0xfffee2bb),
-                  postText: "#TakeCareOfYourHealth",
-                  postImage: "assets/images/post.png",
-                ),
-                verticalSpace(20),
-                PostCommunityApp(
-                  profileImage: 'assets/images/person4.png',
-                  profileName: 'Asmaa saied',
-                  postDate: '3 July at 19:56',
-                  yourMain: 'Healing stories',
-                  yourMainColor: Color(0xffcff5df),
-                  postText:
-                      "Kidney disease can be silent—regular check-ups save lives! Take care of your health. 💙 #AwarenessPost",
-                ),
+                FutureBuilder<List<PostModel>>(
+                    future: AllPostsServices().getAllPosts(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: posts.length,
+                          itemBuilder: (context, index) {
+                            final post = posts[index];
+                            return PostCommunityApp(
+                              profileImage: post.user.profileImage.url,
+                              profileName: post.user.userName,
+                              postDate:
+                                  '${post.createdAt.day}/${post.createdAt.month}',
+                              yourMain: post.tag,
+                              yourMainColor: Colors.red,
+                              postText: post.content,
+                              postImage: post.media.isNotEmpty
+                                  ? post.media[0].url
+                                  : null,
+                            );
+                          },
+                        );
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    }),
                 verticalSpace(30),
               ],
             ),
@@ -82,7 +150,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
         ),
         if (showOverlay)
           OpacityWelcomScreen(
-            onClose: hideOverlay, 
+            onClose: hideOverlay,
           ),
       ],
     );
