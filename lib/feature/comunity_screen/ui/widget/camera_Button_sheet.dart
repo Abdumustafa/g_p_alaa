@@ -1,9 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class CameraModelBottonSheet extends StatelessWidget {
+class CameraModelBottonSheet extends StatefulWidget {
   const CameraModelBottonSheet({
-    super.key,
+    super.key, required this.onImagePicked,
   });
+    final Function(String) onImagePicked;
+
+
+  @override
+  State<CameraModelBottonSheet> createState() => _CameraModelBottonSheetState();
+}
+
+class _CameraModelBottonSheetState extends State<CameraModelBottonSheet> {
+  final ImagePicker _picker = ImagePicker();
+
+Future<void> _pickFromCamera() async {
+  final XFile? pickedImage = await _picker.pickImage(source: ImageSource.camera);
+  if (pickedImage != null) {
+    widget.onImagePicked(pickedImage.path);
+    Navigator.pop(context);
+  }
+}
+
+ Future<void> _pickFromGallery() async {
+  final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+  if (pickedImage != null) {
+    widget.onImagePicked(pickedImage.path); 
+    Navigator.pop(context); 
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +56,13 @@ class CameraModelBottonSheet extends StatelessWidget {
                   SizedBox(height: 20),
                   ListTile(
                     leading: Icon(Icons.photo_camera),
-                    title: Text('camera'),
-                    onTap: () {},
+                    title: Text('Take a photo'),
+                    onTap: _pickFromCamera,
                   ),
                   ListTile(
-                    leading: Icon(
-                      Icons.photo_library,
-                      color: Colors.grey,
-                    ),
-                    title: Text('Add a photo'),
-                    onTap: () {},
+                    leading: Icon(Icons.photo_library, color: Colors.grey),
+                    title: Text('Add from gallery'),
+                    onTap: _pickFromGallery,
                   ),
                 ],
               ),

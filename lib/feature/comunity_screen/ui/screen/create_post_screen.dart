@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:g_p_alaa/core/helper/spaces.dart';
+import 'package:g_p_alaa/core/services/create_post.dart';
 import 'package:g_p_alaa/core/theming/font_weight_helper.dart';
 import 'package:g_p_alaa/core/theming/styles.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/camera_Button_sheet.dart';
@@ -9,7 +12,7 @@ import 'package:g_p_alaa/feature/comunity_screen/ui/widget/tgs_box_text.dart';
 import 'package:get/get.dart';
 
 class CreatePostScreen extends StatefulWidget {
-  CreatePostScreen({super.key});
+  const CreatePostScreen({super.key});
 
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();
@@ -17,12 +20,14 @@ class CreatePostScreen extends StatefulWidget {
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
   String? selectedItemTwo = '  public';
+  String? postImage;
 
   List<String> itemsTwo = [
     '  public',
     '  private',
   ];
 
+  late String profileImage;
   final RxString selectedOption = "None".obs;
 
   final RxBool isTagsVisible = false.obs;
@@ -33,7 +38,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Color getTagColor(String tag) {
     switch (tag) {
-      case "Healing stories":
+      case "Healing story":
         return Color(0xffc9e9d6);
       case "Question":
         return Color(0xffd5dbf5);
@@ -42,6 +47,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       default:
         return Colors.transparent;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    profileImage = Get.arguments["profileImage"];
   }
 
   @override
@@ -76,10 +87,34 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ),
                   ),
                   Spacer(),
-                  Obx(() => Container(
+                  Obx(() => SizedBox(
                         height: 30,
                         child: ElevatedButton(
-                          onPressed: isPostEnabled.value ? () {} : null,
+                          onPressed: isPostEnabled.value
+                              ? () async {
+                                  if (selectedOption.value == "None") {
+                                    Get.snackbar(
+                                      "Tag required",
+                                      "Please select a tag before posting.",
+                                      backgroundColor: Colors.redAccent,
+                                      colorText: Colors.white,
+                                      snackPosition: SnackPosition.TOP,
+                                    );
+                                    return;
+                                  }
+
+                                  try {
+                                    await CreatePostServices().createPost(
+                                      tag: selectedOption.value,
+                                      content: postController.text.trim(),
+                                      imagePath: postImage,
+                                    );
+                                    Get.back();
+                                  } catch (e) {
+                                    print('Error while creating post: $e');
+                                  }
+                                }
+                              : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: isPostEnabled.value
                                 ? Colors.blue
@@ -107,7 +142,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               verticalSpace(20),
               Row(
                 children: [
-                  ProfileImageDesign(image: "assets/images/person8.png"),
+                  ProfileImageDesign(image: profileImage),
                   horizontalSpace(5),
                   Container(
                     height: 30,
@@ -136,7 +171,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ),
                   ),
                   Spacer(),
-                  CameraModelBottonSheet(),
+                  CameraModelBottonSheet(
+                    onImagePicked: (path) {
+                      setState(() {
+                        postImage = path;
+                      });
+                    },
+                  ),
                 ],
               ),
               Row(
@@ -192,6 +233,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       : SizedBox()),
                 ],
               ),
+              verticalSpace(20),
+              if (postImage?.isNotEmpty ?? false)
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.file(
+                      File(postImage!),
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Container(

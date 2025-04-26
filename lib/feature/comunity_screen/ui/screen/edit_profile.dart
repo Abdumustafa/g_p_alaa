@@ -124,7 +124,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
                 Spacer(),
-                CameraModelBottonSheet(),
+                // CameraModelBottonSheet(),
               ],
             ),
             Row(

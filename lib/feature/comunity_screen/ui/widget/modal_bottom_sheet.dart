@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:g_p_alaa/core/helper/spaces.dart';
 import 'package:g_p_alaa/core/theming/styles.dart';
+import 'package:g_p_alaa/feature/comunity_screen/data/models/comment_model.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/comment_post_app.dart';
 
-void ModalBottomSheet(BuildContext context) {
+void ModalBottomSheet(BuildContext context, List<CommentModel> comments) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -34,99 +35,45 @@ void ModalBottomSheet(BuildContext context) {
                 verticalSpace(10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Likes",
+                      Text("Comments",
                           style: TextStyles.font18BlackboldMerriweather),
-                      verticalSpace(10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/person5.png")),
-                          CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/person6.png")),
-                          CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/person7.png")),
-                          CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/person8.png")),
-                          CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/person9.png")),
-                          Stack(
-                            children: [
-                              CircleAvatar(
-                                  radius: 20,
-                                  backgroundColor: Color(0xffe6e7e9)),
-                              Positioned(
-                                top: 9,
-                                bottom: 9,
-                                left: 5,
-                                right: 5,
-                                child: Text("+120",
-                                    style: TextStyle(fontSize: 12)),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      Text("Most Recent",
+                          style:
+                              TextStyle(color: Colors.blueGrey, fontSize: 12)),
                     ],
                   ),
                 ),
                 verticalSpace(10),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Comments",
-                                  style:
-                                      TextStyles.font18BlackboldMerriweather),
-                              Text("Most Recent",
-                                  style: TextStyle(
-                                      color: Colors.blueGrey, fontSize: 12)),
-                            ],
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: comments.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No comments yet.",
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 16),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: comments.length,
+                            itemBuilder: (context, index) {
+                              final comment = comments[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: CommentPostApp(
+                                  profileImage: comment.user.profileImage.url,
+                                  profileName: comment.user.userName,
+                                  commentDate:
+                                      "${comment.createdAt.hour}:${comment.createdAt.minute}",
+                                  commentText: comment.content,
+                                ),
+                              );
+                            },
                           ),
-                          verticalSpace(10),
-                          CommentPostApp(
-                            profileImage: "assets/images/person9.png",
-                            profileName: 'sara abdelrasoul',
-                            commentDate: '01:32 am',
-                            commentText:
-                                'Dealing with kidney problems was hard, but this app makes it easier to understand and track my health.',
-                            commentImage: "assets/images/post.png",
-                          ),
-                          verticalSpace(20),
-                          CommentPostApp(
-                            profileImage: "assets/images/person9.png",
-                            profileName: 'sara abdelrasoul',
-                            commentDate: '01:32 am',
-                            commentText:
-                                'Dealing with kidney problems was hard, but this app makes it easier to understand and track my health.',
-                          ),
-                          verticalSpace(10),
-                          CommentPostApp(
-                            profileImage: "assets/images/person9.png",
-                            profileName: 'sara abdelrasoul',
-                            commentDate: '01:32 am',
-                            commentText:
-                                'Dealing with kidney problems was hard, but this app makes it easier to understand and track my health.',
-                            commentImage: "assets/images/post.png",
-                          ),
-                          verticalSpace(20),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
                 Container(
@@ -161,7 +108,7 @@ void ModalBottomSheet(BuildContext context) {
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 12),
                               border: InputBorder.none,
-                              hintText: "comment...",
+                              hintText: "Write a comment...",
                               hintStyle: TextStyle(color: Colors.grey[600]),
                             ),
                           ),

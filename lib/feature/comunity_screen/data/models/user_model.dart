@@ -9,11 +9,18 @@ class User {
     required this.profileImage,
   });
 
-  factory User.fromJson(jsonData) {
+  factory User.fromJson(dynamic jsonData) {
+    if (jsonData == null) {
+      return User(
+        id: '',
+        userName: '',
+        profileImage: ProfileImage(url: '', id: ''),
+      );
+    }
     return User(
-      id: jsonData['_id'],
-      userName: jsonData['userName'],
-      profileImage: ProfileImage.fromJson(jsonData['profileImage']),
+      id: jsonData['_id'] ?? '',
+      userName: jsonData['userName'] ?? '',
+      profileImage: ProfileImage.fromJson(jsonData['profileImage'] ?? {}),
     );
   }
 }

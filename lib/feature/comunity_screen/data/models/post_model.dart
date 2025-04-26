@@ -31,31 +31,34 @@ class PostModel {
     required this.comments,
     required this.isLiked,
   });
-
   factory PostModel.fromJson(Map<String, dynamic>? jsonData) {
     if (jsonData == null) {
       throw ArgumentError("jsonData is null");
     }
 
     return PostModel(
-      id: jsonData["_id"],
+      id: jsonData["_id"] ?? '',
       user: User.fromJson(jsonData['userId']),
-      content: jsonData['content'],
-      media: (jsonData['media'] as List)
+      content: jsonData['content'] ?? '',
+      media: (jsonData['media'] as List? ?? [])
           .map((e) => MediaModel.fromJson(e))
           .toList(),
-      tag: jsonData['tag'],
-      createdAt: DateTime.parse(jsonData['createdAt']),
-      updatedAt: DateTime.parse(jsonData['updatedAt']),
-      commentCount: jsonData['commentCount'],
-      likes: (jsonData['likes'] as List)
+      tag: jsonData['tag'] ?? '',
+      createdAt: jsonData['createdAt'] != null
+          ? DateTime.parse(jsonData['createdAt'])
+          : DateTime.now(), // default if null
+      updatedAt: jsonData['updatedAt'] != null
+          ? DateTime.parse(jsonData['updatedAt'])
+          : DateTime.now(), // default if null
+      commentCount: jsonData['commentCount'] ?? 0,
+      likes: (jsonData['likes'] as List? ?? [])
           .map((e) => LikeModel.fromJson(e))
           .toList(),
-      likesCount: jsonData['likesCount'],
-      comments: (jsonData['comments'] as List)
+      likesCount: jsonData['likesCount'] ?? 0,
+      comments: (jsonData['comments'] as List? ?? [])
           .map((e) => CommentModel.fromJson(e))
           .toList(),
-      isLiked: jsonData['isLiked'],
+      isLiked: jsonData['isLiked'] ?? false,
     );
   }
 }

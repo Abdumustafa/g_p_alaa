@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:g_p_alaa/core/helper/spaces.dart';
 import 'package:g_p_alaa/core/theming/styles.dart';
+import 'package:g_p_alaa/feature/CommentsPage.dart';
+import 'package:g_p_alaa/feature/comunity_screen/data/models/post_model.dart';
+import 'package:g_p_alaa/feature/comunity_screen/ui/widget/like_icon.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/modal_bottom_sheet.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/profile_image.dart';
 import 'package:get/get.dart';
@@ -17,23 +20,40 @@ class PostCommunityApp extends StatelessWidget {
     required this.tagColor,
     required this.postText,
     this.postImage,
+    required this.likesCount,
+    required this.commentCount, required this.post,
   });
   final String profileImage;
   final String profileName;
   final String postDate;
   final String tag;
   final Color tagColor;
+  final PostModel post;
   final String postText;
   final String? postImage;
+  final int likesCount;
+  final int commentCount;
+  Color getTagColor(String tag) {
+    switch (tag) {
+      case "Healing story":
+        return Color(0xffc9e9d6);
+      case "Question":
+        return Color(0xffd5dbf5);
+      case "Advice":
+        return Color(0xfffee2bb);
+      default:
+        return Colors.grey.shade300;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: 20, left: 20),
+      padding: EdgeInsets.only(right: 20, left: 20, bottom: 20),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey.shade100,
+            color: Colors.grey.shade200,
             width: 1.5,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -81,7 +101,7 @@ class PostCommunityApp extends StatelessWidget {
                     height: 30,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: tagColor),
+                        color: getTagColor(tag)),
                     child: Padding(
                         padding: EdgeInsets.only(right: 10, left: 10),
                         child: Text(
@@ -119,14 +139,14 @@ class PostCommunityApp extends StatelessWidget {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: postImage!.startsWith('http')
-                        ? SvgPicture.asset(
-                            'assets/images/earth.svg',
-                            height: 1,
-                          )
-                        : Image.asset(
+                        ? Image.network(
                             postImage!,
                             width: double.infinity,
                             fit: BoxFit.cover,
+                          )
+                        : SvgPicture.asset(
+                            postImage!,
+                            height: 200,
                           )),
               ),
             Divider(
@@ -136,34 +156,28 @@ class PostCommunityApp extends StatelessWidget {
               padding: const EdgeInsets.only(right: 8, left: 8, bottom: 8),
               child: GestureDetector(
                 onTap: () {
-                  ModalBottomSheet(context);
+                  ModalBottomSheet(context ,post.comments);
+
                 },
                 child: Container(
                   color: Colors.white,
                   width: double.infinity,
                   child: Row(
                     children: [
-                      SvgPicture.asset(
-                        'assets/images/like_icon.svg',
-                        height: 18,
-                      ),
-                      Text(
-                        "  7      ",
-                        style: TextStyle(color: Colors.grey),
-                      ),
+                      LikeButton(initialCount: likesCount),
                       SvgPicture.asset(
                         'assets/images/comment_icon.svg',
                         height: 15,
                       ),
                       Text(
-                        "  5 ",
+                        "  $commentCount",
                         style: TextStyle(color: Colors.grey),
                       )
                     ],
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

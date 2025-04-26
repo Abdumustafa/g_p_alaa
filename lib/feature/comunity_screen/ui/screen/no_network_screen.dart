@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:g_p_alaa/core/helper/spaces.dart';
 import 'package:g_p_alaa/core/theming/styles.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class NoNetworkScreen extends StatelessWidget {
   const NoNetworkScreen({super.key});
@@ -24,7 +26,9 @@ class NoNetworkScreen extends StatelessWidget {
             Container(
               width: 300,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.back();
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xff2f79e8),
                   padding: EdgeInsets.symmetric(horizontal: 100, vertical: 14),

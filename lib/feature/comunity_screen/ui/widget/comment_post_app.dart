@@ -7,7 +7,7 @@ import 'package:g_p_alaa/core/helper/spaces.dart';
 import 'package:g_p_alaa/core/theming/font_weight_helper.dart';
 import 'package:g_p_alaa/core/theming/styles.dart';
 
-class CommentPostApp extends StatelessWidget {
+class CommentPostApp extends StatefulWidget {
   CommentPostApp({
     Key? key,
     required this.profileImage,
@@ -23,14 +23,20 @@ class CommentPostApp extends StatelessWidget {
   final String? commentImage;
 
   @override
+  State<CommentPostApp> createState() => _CommentPostAppState();
+}
+
+class _CommentPostAppState extends State<CommentPostApp> {
+  @override
   Widget build(BuildContext context) {
+    bool isLiked = false;
     return Column(
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CircleAvatar(
-              backgroundImage: AssetImage(profileImage),
+              backgroundImage: NetworkImage(widget.profileImage),
             ),
             Container(
               decoration: BoxDecoration(
@@ -62,7 +68,7 @@ class CommentPostApp extends StatelessWidget {
                                         ),
                                       ),
                                       verticalSpace(5),
-                                      Text(" $commentDate",
+                                      Text(" ${widget.commentDate}",
                                           style: TextStyle(
                                               fontSize: 8,
                                               fontWeight: FontWeight.w400,
@@ -84,18 +90,18 @@ class CommentPostApp extends StatelessWidget {
                                 padding: EdgeInsets.all(14),
                                 width: 280,
                                 child: Text(
-                                  commentText,
+                                  widget.commentText,
                                   style: TextStyles.font18BlackboldMerriweather,
                                 ),
                               ),
-                              if (commentImage != null &&
-                                  commentImage!.isNotEmpty)
+                              if (widget.commentImage != null &&
+                                  widget.commentImage!.isNotEmpty)
                                 Padding(
                                   padding: const EdgeInsets.all(5.0),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(5),
-                                    child: Image.asset(
-                                      commentImage!,
+                                    child: Image.network(
+                                      widget.commentImage!,
                                       width: 250,
                                       fit: BoxFit.cover,
                                       errorBuilder:
@@ -121,9 +127,20 @@ class CommentPostApp extends StatelessWidget {
           padding: const EdgeInsets.only(left: 50, top: 10),
           child: Row(
             children: [
-              SvgPicture.asset(
-                'assets/images/like_icon.svg',
-                height: 18,
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isLiked = !isLiked;
+                  });
+                },
+                child: Container(
+                  color: Colors.white,
+                  child: SvgPicture.asset(
+                    'assets/images/like_icon.svg',
+                    height: 18,
+                    color: isLiked ? Colors.red : Colors.grey,
+                  ),
+                ),
               ),
               horizontalSpace(10),
               Text(
