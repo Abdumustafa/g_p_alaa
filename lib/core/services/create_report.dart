@@ -1,7 +1,7 @@
 import 'package:g_p_alaa/core/helper/api.dart';
 import 'package:g_p_alaa/feature/comunity_screen/data/models/post_model.dart';
 
-class CreatePostServices {
+class CreateReportServices {
   Future<PostModel> createPost({
     required String tag,
     required String content,

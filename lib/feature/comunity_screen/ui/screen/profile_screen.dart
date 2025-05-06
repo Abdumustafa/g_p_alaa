@@ -49,7 +49,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           final firstUserId = posts.first.user.id;
 
-          final userPosts = posts.where((post) => post.user.id == firstUserId).toList();
+          final userPosts =
+              posts.where((post) => post.user.id == firstUserId).toList();
 
           if (userPosts.isEmpty) {
             return Center(child: Text('No posts available for this user.'));
@@ -107,23 +108,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           verticalSpace(10),
                           ElevatedButton(
                             onPressed: () {
-                              Get.toNamed("/CreatePostScreen")?.then((_) {
-                                setState(() {
-                                  futurePosts =
-                                      AllPostsServices().getAllPosts();
-                                });
-                              });
+                              print('Follow button pressed');
+                              Get.toNamed(
+                                "/CreatePostScreen",
+                              );
                             },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.edit, color: Colors.blueGrey),
-                                SizedBox(width: 5),
-                                Text(
-                                  'Add Post',
-                                  style: TextStyle(color: Colors.blueGrey),
-                                ),
-                              ],
+                            child: GestureDetector(
+                              onTap: () {
+                                print('Add Post button pressed');
+                                Get.toNamed(
+                                  "/CreatePostScreen",
+                                );
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.edit, color: Colors.blueGrey),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    'Add Post',
+                                    style: TextStyle(color: Colors.blueGrey),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -140,7 +147,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
                 SizedBox(height: 150),
-
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -155,7 +161,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       tag: post.tag,
                       tagColor: Color(0xFFd5dbf5),
                       postText: post.content,
-                      postImage: post.media.isNotEmpty ? post.media[0].url : null,
+                      postImage:
+                          post.media.isNotEmpty ? post.media[0].url : null,
                       likesCount: post.likesCount,
                       commentCount: post.commentCount,
                     );

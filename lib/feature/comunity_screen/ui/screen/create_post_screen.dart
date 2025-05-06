@@ -107,7 +107,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     await CreatePostServices().createPost(
                                       tag: selectedOption.value,
                                       content: postController.text.trim(),
-                                      imagePath: postImage,
+                                      media: postImage,
                                     );
                                     Get.back();
                                   } catch (e) {

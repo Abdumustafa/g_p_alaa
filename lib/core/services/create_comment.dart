@@ -1,28 +1,27 @@
 import 'package:g_p_alaa/core/helper/api.dart';
-import 'package:g_p_alaa/feature/comunity_screen/data/models/post_model.dart';
-
+import 'package:g_p_alaa/feature/comunity_screen/data/models/comment_model.dart';
 class CreateCommentServices {
-  Future<PostModel> CreateComment({
-    required String tag,
+  Future<CommentModel> createComment({
     required String content,
-    String? media, String? imagePath,
+    String? media,
+    String? imagePath,
   }) async {
     Map<String, dynamic> body = {
-      'tag': tag,
       'content': content,
+      'media': imagePath ?? (media != null && media.isNotEmpty ? media : []),
     };
 
-    if (media != null && media.isNotEmpty) {
-      body['media'] = media;
-    }
-
     final response = await ApiMethod().post(
-      url: "https://renalyze-amiras-projects-2023fd67.vercel.app/post/add",
+      url: "https://renalyze-amiras-projects-2023fd67.vercel.app/post/67a203fe5c138bd0329f5802/comment",
       body: body,
-      token:
-          "TOKEN__eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFtaXJhQGdtYWlsLmNvbSIsImlhdCI6MTc0MTk1MzE4Nn0.IWiPhNrbOsKw8wWjcdojOJj9M7ot_pOwSvAuoyN7anY",
+      token: "TOKEN__eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFtaXJhQGdtYWlsLmNvbSIsImlhdCI6MTc0MTk1MzE4Nn0.IWiPhNrbOsKw8wWjcdojOJj9M7ot_pOwSvAuoyN7anY",
     );
+    print("Response: $response");
 
-    return PostModel.fromJson(response);
+    if (response != null && response['comment'] != null) {
+      return CommentModel.fromJson(response['comment']);
+    } else {
+      throw Exception("Unexpected response format: $response");
+    }
   }
 }

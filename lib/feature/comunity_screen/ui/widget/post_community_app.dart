@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:g_p_alaa/core/helper/spaces.dart';
 import 'package:g_p_alaa/core/theming/styles.dart';
-import 'package:g_p_alaa/feature/CommentsPage.dart';
 import 'package:g_p_alaa/feature/comunity_screen/data/models/post_model.dart';
+import 'package:g_p_alaa/feature/comunity_screen/ui/screen/report_screen.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/like_icon.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/modal_bottom_sheet.dart';
 import 'package:g_p_alaa/feature/comunity_screen/ui/widget/profile_image.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class PostCommunityApp extends StatelessWidget {
   const PostCommunityApp({
@@ -21,7 +19,8 @@ class PostCommunityApp extends StatelessWidget {
     required this.postText,
     this.postImage,
     required this.likesCount,
-    required this.commentCount, required this.post,
+    required this.commentCount,
+    required this.post,
   });
   final String profileImage;
   final String profileName;
@@ -114,10 +113,10 @@ class PostCommunityApp extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: () {
-                        Get.toNamed("/EditProfile");
+                        ModalBottomSheetReport(context, post.comments);
                       },
                       child: Icon(
-                        Icons.edit,
+                        Icons.report_outlined,
                         size: 20,
                         color: Colors.blueGrey,
                       ),
@@ -156,8 +155,7 @@ class PostCommunityApp extends StatelessWidget {
               padding: const EdgeInsets.only(right: 8, left: 8, bottom: 8),
               child: GestureDetector(
                 onTap: () {
-                  ModalBottomSheet(context ,post.comments);
-
+                  ModalBottomSheet(context, post.comments);
                 },
                 child: Container(
                   color: Colors.white,

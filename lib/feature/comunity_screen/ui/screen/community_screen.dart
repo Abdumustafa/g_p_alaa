@@ -31,6 +31,17 @@ class _CommunityScreenState extends State<CommunityScreen> {
   @override
   void initState() {
     super.initState();
+    futurePosts = AllPostsServices().getAllPosts();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!showOverlay && ModalRoute.of(context)?.isCurrent == true) {
+      setState(() {
+        futurePosts = AllPostsServices().getAllPosts();
+      });
+    }
   }
 
   @override
@@ -80,13 +91,17 @@ class _CommunityScreenState extends State<CommunityScreen> {
                       child: Column(
                         children: [
                           GestureDetector(
-                            onTap: () {
-                              Get.toNamed(
+                            onTap: () async {
+                              await Get.toNamed(
                                 "/CreatePostScreen",
                                 arguments: {
-                                  "profileImage": posts.first.user.profileImage.url,
+                                  "profileImage":
+                                      posts.first.user.profileImage.url,
                                 },
                               );
+                              setState(() {
+                                futurePosts = AllPostsServices().getAllPosts();
+                              });
                             },
                             child: ProfileAndAddPost(
                               image: posts.first.user.profileImage.url,

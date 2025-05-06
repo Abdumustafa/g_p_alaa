@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,9 +5,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:g_p_alaa/core/helper/spaces.dart';
 import 'package:g_p_alaa/core/theming/font_weight_helper.dart';
 import 'package:g_p_alaa/core/theming/styles.dart';
+import 'package:g_p_alaa/feature/comunity_screen/ui/screen/report_screen.dart';
 
 class CommentPostApp extends StatefulWidget {
-  CommentPostApp({
+  const CommentPostApp({
     Key? key,
     required this.profileImage,
     required this.profileName,
@@ -27,9 +27,10 @@ class CommentPostApp extends StatefulWidget {
 }
 
 class _CommentPostAppState extends State<CommentPostApp> {
+  bool isLiked = false;
+
   @override
   Widget build(BuildContext context) {
-    bool isLiked = false;
     return Column(
       children: [
         Row(
@@ -49,39 +50,45 @@ class _CommentPostAppState extends State<CommentPostApp> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "profileName",
-                                        style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeightHelper.bold,
-                                          color: Colors.black,
-                                          fontFamily: "Merriweather",
-                                        ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "profileName",
+                                      style: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeightHelper.bold,
+                                        color: Colors.black,
+                                        fontFamily: "Merriweather",
                                       ),
-                                      verticalSpace(5),
-                                      Text(" ${widget.commentDate}",
-                                          style: TextStyle(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.blueGrey)),
-                                    ],
+                                    ),
+                                    verticalSpace(5),
+                                    Text(" ${widget.commentDate}",
+                                        style: TextStyle(
+                                            fontSize: 8,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.blueGrey)),
+                                  ],
+                                ),
+                                horizontalSpace(160),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      ModalBottomSheetReport(context, []);
+                                    },
+                                    child: Icon(
+                                      Icons.report_outlined,
+                                      size: 20,
+                                      color: Colors.blueGrey,
+                                    ),
                                   ),
-                                  horizontalSpace(160),
-                                  Icon(
-                                    Icons.more_horiz_rounded,
-                                    color: Colors.blueGrey,
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                           Column(
@@ -138,7 +145,10 @@ class _CommentPostAppState extends State<CommentPostApp> {
                   child: SvgPicture.asset(
                     'assets/images/like_icon.svg',
                     height: 18,
-                    color: isLiked ? Colors.red : Colors.grey,
+                    colorFilter: ColorFilter.mode(
+                      isLiked ? Colors.red : Colors.grey,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
               ),

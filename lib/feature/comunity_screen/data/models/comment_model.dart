@@ -10,6 +10,7 @@ class CommentModel {
   final List<dynamic> likes;
   final int likesCount;
   final bool isLiked;
+  final List<dynamic> media;  // تأكد من أنها يمكن أن تكون فارغة أو null
 
   CommentModel({
     required this.id,
@@ -21,19 +22,28 @@ class CommentModel {
     required this.likes,
     required this.likesCount,
     required this.isLiked,
+    required this.media,  // إضافة هذا الحقل
   });
+factory CommentModel.fromJson(Map<String, dynamic> jsonData) {
+  final userJson = jsonData['userId'];
 
-  factory CommentModel.fromJson(jsonData) {
-    return CommentModel(
-      id: jsonData['_id'],
-      user: User.fromJson(jsonData['userId']),
-      postId: jsonData['postId'],
-      content: jsonData['content'],
-      createdAt: DateTime.parse(jsonData['createdAt']),
-      repliesCount: jsonData['repliesCount'],
-      likes: jsonData['likes'],
-      likesCount: jsonData['likesCount'],
-      isLiked: jsonData['isLiked'],
-    );
-  }
+  return CommentModel(
+    id: jsonData['_id'],
+    user: userJson is Map<String, dynamic>
+        ? User.fromJson(userJson)
+        : User(
+            userName: "Unknown",
+            profileImage: ProfileImage(url: "", id: ''), id: '',
+          ),
+    postId: jsonData['postId'],
+    content: jsonData['content'],
+    createdAt: DateTime.parse(jsonData['createdAt']),
+    repliesCount: jsonData['repliesCount'] ?? 0,
+    likes: jsonData['likes'] ?? [],
+    likesCount: jsonData['likesCount'] ?? 0,
+    isLiked: jsonData['isLiked'] ?? false,
+    media: jsonData['media'] ?? [],
+  );
+}
+
 }
